@@ -30,7 +30,7 @@ OptionParser.new do |opts|
     github-to-canvas --info COURSE
     github-to-canvas --version
 
-    
+
     Run these commands from inside a local GitHub repository. This gem is built for Flatiron School's internal use.
     Some default behaviors assume this, like the default Canvas API path.
 
@@ -40,12 +40,12 @@ OptionParser.new do |opts|
     github-to-canvas --create-lesson 154 --name "Fetch Lab"                                        -> Creates a lesson in course 154 with the provided name, derives the type from the local repo
     github-to-canvas --create-lesson 154 --name "Fetch Lab" --type assignment                      -> Creates an assignment in course 154 with the provided name
     github-to-canvas --create-lesson 154 --name "Fetch Lab" --branch solution                      -> Creates a lesson in course 154 with the provided name, uses the repository's solution branch and derives the type from the local repo
-    github-to-canvas --align                                                                       -> Patches existing lessons in Canvas based on the .canvas file  
+    github-to-canvas --align                                                                       -> Patches existing lessons in Canvas based on the .canvas file
     github-to-canvas --align --fis-links                                                           -> Patches existing lessons in Canvas based on the .canvas file, adds additional Flatiron School specific HTML and meta-data
-    github-to-canvas --align --remove-header-and-footer                                            -> Patches existing lessons in Canvas based on the .canvas file, removes top lesson header before converting to HTML    
+    github-to-canvas --align --remove-header-and-footer                                            -> Patches existing lessons in Canvas based on the .canvas file, removes top lesson header before converting to HTML
 
     Get Info on a Canvas Course, Lesson or GitHub Repo:
-    
+
     github-to-canvas --query COURSE                                                                -> Displays a course's modules and their lessons in course order as YAML
     github-to-canvas --map YAML                                                                    -> Uses a YAML file created with --query to retrieve repositories that were associated with Canvas lessons using --fis-links. Returns an updated YAML.
     github-to-canvas --read-from-canvas CANVAS_LESSON_URL                                          -> Retrieves a lesson's contents and information from Canvas
@@ -59,46 +59,46 @@ OptionParser.new do |opts|
     Create and Update Canvas Courses From YAML:
 
     github-to-canvas --build-course YAML_FILE                                                     -> Uses the provided YAML file to create a course, add modules and populate them with lessons using remote GitHub repositories
-    github-to-canvas --add-to-course YAML_FILE --course                                           -> Uses a YAML file to a modules and lessons to an existing course.
+    github-to-canvas --add-to-course YAML_FILE --course                                           -> Uses a YAML file to add modules and lessons to an existing course from remote (public) GitHub repository.
     github-to-canvas --update-course YAML_FILE                                                    -> Uses a YAML file to update lessons using their associated GitHub repositories (ignores module/course structure in YAML file)
 
   EOBANNER
 
-  opts.on("-cCOURSE", "--create-lesson COURSE", 
-          "Creates a new canvas lesson, converting the local repository's README.md to HTML. Adds .canvas file to remote repository") do |course| 
+  opts.on("-cCOURSE", "--create-lesson COURSE",
+          "Creates a new canvas lesson, converting the local repository's README.md to HTML. Adds .canvas file to remote repository") do |course|
             options[:create_lesson] = true
             options[:course_id] = course
           end
-  opts.on("-bBRANCH", "--branch BRANCH", 
-          "Sets the repository branch used for lesson creation") do |branch| 
+  opts.on("-bBRANCH", "--branch BRANCH",
+          "Sets the repository branch used for lesson creation") do |branch|
             options[:branch] = branch
           end
-  opts.on("-nNAME", "--name NAME", 
-          "Sets the name of the new Canvas lesson to be created. If no name is given, repository folder name is used") do |name| 
+  opts.on("-nNAME", "--name NAME",
+          "Sets the name of the new Canvas lesson to be created. If no name is given, repository folder name is used") do |name|
             options[:name] = name
           end
-  opts.on("-tTYPE", "--type TYPE", 
-          "Sets the type Canvas lesson to be created (page or assignment). If no type, type decided based on repository structure") do |type| 
+  opts.on("-tTYPE", "--type TYPE",
+          "Sets the type Canvas lesson to be created (page or assignment). If no type, type decided based on repository structure") do |type|
             options[:type] = type.downcase
             abort if type == 'quiz' || type == 'discussion'
             # if type == 'page' || type == 'assignment' || type == 'discussion' || type == 'quiz' || type == 'Page' || type == 'Assignment' || type == 'Discussion' || type == 'Quiz'
-              
+
             # else
             #   puts "Invalid type. Defaulting to page"
             #   options[:type] = "page"
             # end
           end
-  opts.on("-fFILE", "--file FILE", 
-          "Looks for and uses a markdown file in the currentt folder as source for conversion. Default file is README.md. Skips writing .canvas to repository") do |file| 
+  opts.on("-fFILE", "--file FILE",
+          "Looks for and uses a markdown file in the currentt folder as source for conversion. Default file is README.md. Skips writing .canvas to repository") do |file|
             options[:file_to_convert] = file
           end
   opts.on("-s", "--save-to-github",
-          "Creates a local .canvas file and attempts to commit and push it to the GitHub repository") do |s| 
-            options[:save_to_github] = true 
+          "Creates a local .canvas file and attempts to commit and push it to the GitHub repository") do |s|
+            options[:save_to_github] = true
           end
-  opts.on("-a", "--align", 
+  opts.on("-a", "--align",
           "Updates a canvas lesson based on the local repository's README.md") do |a|
-            options[:align] = true 
+            options[:align] = true
           end
   opts.on("-v", "--version",
           "Displays current gem version") do |v|
@@ -112,11 +112,11 @@ OptionParser.new do |opts|
           "Adds additional GitHub after markdown conversion") do |f|
             options[:git_links] = true
           end
-  opts.on("--aaq", 
+  opts.on("--aaq",
           "Adds AAQ flag to HTML header appended with --fis-links") do |aaq|
             options[:aaq] = aaq
           end
-  opts.on("--prework", 
+  opts.on("--prework",
           "Adds prework flag to HTML header appended with --fis-links") do |prework|
             options[:prework] = prework
           end
@@ -140,19 +140,19 @@ OptionParser.new do |opts|
           "For align functionality only - updates the HTML content of a lesson without changing the name") do |o|
             options[:only_content] = true
           end
-  opts.on("-q COURSE", "--query COURSE", 
+  opts.on("-q COURSE", "--query COURSE",
           "Displays a course's lessons and assignments") do |course|
             options[:query] = course
           end
-  opts.on("--map YAML_FILE", 
+  opts.on("--map YAML_FILE",
           "REQUIRES -f or --file Associates canvas lessons with repositories. Use query to create required YAML file") do |file|
             options[:map] = file
           end
-  opts.on("--urls-only", 
+  opts.on("--urls-only",
           "Use with --map. Outputs repo URLs instead of YAML") do |urls|
             options[:urls_only] = urls
           end
- opts.on("--csv", 
+ opts.on("--csv",
          "Returns a course's lesson struction as CSV") do |csv|
            options[:csv] = csv
          end
@@ -176,23 +176,23 @@ OptionParser.new do |opts|
           "Aligns an existing Canvas lesson using a remote GitHub Readme. --course, --id, and --type options required") do |url|
             options[:align_from_github] = url
           end
-  opts.on("--build-course YAML_FILE", 
+  opts.on("--build-course YAML_FILE",
           "Creates Canvas course using provided YAML file") do |file|
             options[:build_course] = file
           end
-  opts.on("--add-to-course YAML_FILE", 
+  opts.on("--add-to-course YAML_FILE",
           "Creates Canvas course using provided YAML file") do |file|
             options[:add_to_course] = file
           end
-  opts.on("--update-course-lessons YAML_FILE", 
+  opts.on("--update-course-lessons YAML_FILE",
           "Updates all lessons in a course using remote repos in provided YAML file") do |file|
             options[:update_course_lessons] = file
           end
-  opts.on("--clone-from-yaml YAML_FILE", 
+  opts.on("--clone-from-yaml YAML_FILE",
           "Iterates over provided course YAML file and clones repos locally") do |file|
             options[:clone_from_yaml] = file
           end
-  opts.on("--contains-html", 
+  opts.on("--contains-html",
           "DEPRECATED: HTML in code blocks handled by Rouge gem.") do |html|
             puts "--contains-html flag is DEPRECATED: HTML in code blocks handled by Rouge gem."
           end
@@ -208,8 +208,8 @@ OptionParser.new do |opts|
           "Update a course using a CSV of lesson repos, names, modules, types, lesson IDs, and course IDs") do |csv_align|
             options[:csv_align] = csv_align
           end
-  
-  
+
+
 end.parse!
 
 if options[:version]
@@ -218,7 +218,7 @@ if options[:version]
 end
 
 if options[:read_from_canvas]
-  GithubToCanvas.new(mode: 'canvas_read', 
+  GithubToCanvas.new(mode: 'canvas_read',
                     filepath: options[:read_from_canvas])
   abort
 end
@@ -226,7 +226,7 @@ end
 if options[:canvas_to_canvas]
   GithubToCanvas.new(mode: 'canvas_copy',
                     filepath: options[:canvas_to_canvas],
-                    course_id: options[:course_id], 
+                    course_id: options[:course_id],
                     type: options[:type],
                     id: options[:id]
                     )
@@ -234,7 +234,7 @@ if options[:canvas_to_canvas]
 end
 
 if options[:read_from_github]
-  GithubToCanvas.new(mode: 'github_read', 
+  GithubToCanvas.new(mode: 'github_read',
                     filepath: options[:read_from_github],
                     remove_header_and_footer: !!options[:remove_header_and_footer],
                     forkable: !!options[:forkable],
@@ -246,9 +246,9 @@ end
 
 if options[:create_from_github]
   if options[:course_id] && options[:type]
-    GithubToCanvas.new(mode: 'github_create', 
-                      filepath: options[:create_from_github], 
-                      course_id: options[:course_id], 
+    GithubToCanvas.new(mode: 'github_create',
+                      filepath: options[:create_from_github],
+                      course_id: options[:course_id],
                       type: options[:type],
                       name: options[:name],
                       remove_header_and_footer: !!options[:remove_header_and_footer],
@@ -264,10 +264,10 @@ end
 
 if options[:align_from_github]
   if options[:course_id] && options[:type] && options[:id]
-    GithubToCanvas.new(mode: 'github_align', 
-                      filepath: options[:align_from_github], 
-                      course_id: options[:course_id], 
-                      type: options[:type], 
+    GithubToCanvas.new(mode: 'github_align',
+                      filepath: options[:align_from_github],
+                      course_id: options[:course_id],
+                      type: options[:type],
                       id: options[:id],
                       name: options[:name],
                       remove_header_and_footer: !!options[:remove_header_and_footer],
@@ -287,7 +287,7 @@ if options[:query]
 end
 
 if options[:map]
-  GithubToCanvas.new(mode: 'map', 
+  GithubToCanvas.new(mode: 'map',
                       file_to_convert: options[:map],
                       urls_only: !!options[:urls_only],
                       csv: !!options[:csv])
@@ -300,10 +300,10 @@ end
 # end
 
 if options[:csv_build]
-  GithubToCanvas.new(mode: 'csv_build', 
+  GithubToCanvas.new(mode: 'csv_build',
                     file_to_convert: options[:csv_build],
                     course_id: options[:course_id],
-                    fis_links: !!options[:fis], 
+                    fis_links: !!options[:fis],
                     remove_header_and_footer: !!options[:remove_header_and_footer],
                     aaq: !!options[:aaq],
                     forkable: !!options[:forkable],
@@ -313,10 +313,10 @@ if options[:csv_build]
 end
 
 if options[:csv_align]
-  GithubToCanvas.new(mode: 'csv_align', 
+  GithubToCanvas.new(mode: 'csv_align',
                     file_to_convert: options[:csv_align],
                     course_id: options[:course_id],
-                    fis_links: !!options[:fis], 
+                    fis_links: !!options[:fis],
                     remove_header_and_footer: !!options[:remove_header_and_footer],
                     aaq: !!options[:aaq],
                     forkable: !!options[:forkable],
@@ -326,9 +326,9 @@ if options[:csv_align]
 end
 
 if options[:build_course]
-  GithubToCanvas.new(mode: 'build_course', 
+  GithubToCanvas.new(mode: 'build_course',
                     file_to_convert: options[:build_course],
-                    fis_links: !!options[:fis], 
+                    fis_links: !!options[:fis],
                     remove_header_and_footer: !!options[:remove_header_and_footer],
                     aaq: !!options[:aaq],
                     prework: !!options[:prework],
@@ -339,10 +339,10 @@ end
 
 if options[:add_to_course]
   if options[:course_id]
-    GithubToCanvas.new(mode: 'add_to_course', 
-                      course_id: options[:course_id], 
+    GithubToCanvas.new(mode: 'add_to_course',
+                      course_id: options[:course_id],
                       file_to_convert: options[:add_to_course],
-                      fis_links: !!options[:fis], 
+                      fis_links: !!options[:fis],
                       remove_header_and_footer: !!options[:remove_header_and_footer],
                       forkable: !!options[:forkable],
                       aaq: !!options[:aaq],
@@ -355,9 +355,9 @@ if options[:add_to_course]
 end
 
 if options[:update_course_lessons]
-  GithubToCanvas.new(mode: 'update_course_lessons', 
+  GithubToCanvas.new(mode: 'update_course_lessons',
                     file_to_convert: options[:update_course_lessons],
-                    fis_links: !!options[:fis], 
+                    fis_links: !!options[:fis],
                     remove_header_and_footer: !!options[:remove_header_and_footer],
                     forkable: !!options[:forkable],
                     aaq: !!options[:aaq],
@@ -367,7 +367,7 @@ if options[:update_course_lessons]
 end
 
 if options[:clone_from_yaml]
-  GithubToCanvas.new(mode: 'clone_course', 
+  GithubToCanvas.new(mode: 'clone_course',
                     file_to_convert: options[:clone_from_yaml])
   abort
 end
@@ -403,7 +403,7 @@ if !options[:name]
       options[:name] = markdown.match(/^# .+?\n/)[0].strip.gsub("# ","").gsub("#","")
     else
       options[:name] = File.basename(Dir.getwd)
-    end    
+    end
     options[:file_to_convert] = "README.md"
   end
 end
@@ -413,15 +413,15 @@ if !options[:file_to_convert]
 end
 
 if options[:create_lesson]
-  GithubToCanvas.new(mode: "create", 
-                    course_id: options[:course_id], 
-                    filepath: Dir.pwd, 
+  GithubToCanvas.new(mode: "create",
+                    course_id: options[:course_id],
+                    filepath: Dir.pwd,
                     file_to_convert: options[:file_to_convert],
-                    branch: options[:branch], 
-                    name: options[:name], 
-                    type: options[:type], 
-                    save_to_github: !!options[:save_to_github], 
-                    fis_links: !!options[:fis], 
+                    branch: options[:branch],
+                    name: options[:name],
+                    type: options[:type],
+                    save_to_github: !!options[:save_to_github],
+                    fis_links: !!options[:fis],
                     git_links: !!options[:git_links],
                     remove_header_and_footer: !!options[:remove_header_and_footer],
                     only_update_content: !!options[:only_content],
@@ -431,17 +431,17 @@ if options[:create_lesson]
 end
 
 if options[:align]
-  GithubToCanvas.new(mode: "align", 
-                    course_id: options[:course_id], 
+  GithubToCanvas.new(mode: "align",
+                    course_id: options[:course_id],
                     id: options[:id],
                     filepath: Dir.pwd,
-                    file_to_convert: options[:file_to_convert], 
+                    file_to_convert: options[:file_to_convert],
                     branch: options[:branch],
                     name: options[:name],
                     type: options[:type],
-                    save_to_github: !!options[:save_to_github], 
+                    save_to_github: !!options[:save_to_github],
                     fis_links: !!options[:fis],
-                    git_links: !!options[:git_links], 
+                    git_links: !!options[:git_links],
                     remove_header_and_footer: !!options[:remove_header_and_footer],
                     only_update_content: !!options[:only_content],
                     forkable: !!options[:forkable],
