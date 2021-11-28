@@ -363,7 +363,7 @@ if options[:add_to_course_local]
   if options[:course_id]
     GithubToCanvas.new(mode: 'add_to_course_local',
                       course_id: options[:course_id],
-                      yaml_file_to_convert: options[:add_to_course], # file_to_convert comes from repository paths in YAML
+                      yaml_file_to_convert: options[:add_to_course_local], # file_to_convert comes from repository paths in YAML
                       fis_links: !!options[:fis],
                       remove_header_and_footer: !!options[:remove_header_and_footer],
                       forkable: !!options[:forkable],
