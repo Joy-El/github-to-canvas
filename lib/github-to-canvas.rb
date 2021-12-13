@@ -133,6 +133,14 @@ class GithubToCanvas
           # split relative path from repository tag in YAML into path and file to match downstream processing expectations
           options[:filepath] = File.dirname(lesson["repository"])
           options[:file_to_convert] = File.basename(lesson["repository"])
+
+          # add other options that pass through to Canvas via its REST API
+          options[:points_possible] = lesson["points_possible"] || 1 # 1pt default
+          options[:grading_type] = lesson["grading_type"] || 'pass_fail' # pass_fail default
+          options[:submission_types] = lesson["submission_types"] || 'online_url' # online_url default
+          options[:published] = lesson["published"] || false # false default
+          options[:indent] = lesson["indent"] || 1 # 1 default
+
           html = RepositoryConverter.local_file_conversion(options)
           # Add each lesson to it's module
           html = RepositoryConverter.adjust_converted_html(options, html)

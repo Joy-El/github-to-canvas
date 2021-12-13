@@ -54,7 +54,7 @@ class CanvasInterface
       payload = {
         'module_item[title]' => lesson_info["title"],
         'module_item[type]' => lesson_info["type"].capitalize,
-        'module_item[indent]' => 0,
+        'module_item[indent]' => lesson_info["indent"],
         'module_item[page_url]' => lesson_info["page_url"],
         'module_item[completion_requirement][type]' => 'must_view'
       }
@@ -65,7 +65,7 @@ class CanvasInterface
       payload = {
         'module_item[title]' => lesson_info["title"],
         'module_item[type]' => lesson_info["type"].capitalize,
-        'module_item[indent]' => 1,
+        'module_item[indent]' => lesson_info["indent"],
         'module_item[content_id]' =>  lesson_info["id"],
         'module_item[completion_requirement][type]' => 'must_submit'
       }
@@ -389,9 +389,10 @@ class CanvasInterface
         payload = {
           'assignment[name]' => name,
           'assignment[description]' => html,
-          'assignment[submission_types][]' => "online_url",
-          'assignment[grading_type]' => 'pass_fail',
-          'assignment[points_possible]' => 1
+          'assignment[submission_types][]' => options[:submission_types],
+          'assignment[grading_type]' => options[:grading_type],
+          'assignment[points_possible]' => options[:points_possible],
+          'assignment[published]' => options[:published]
         }
       elsif options[:type] == "discussion"
         payload = {
@@ -402,7 +403,8 @@ class CanvasInterface
         payload = {
           'wiki_page[title]' => name,
           'wiki_page[body]' => html,
-          'wiki_page[editing_roles]' => "teachers" 
+          'wiki_page[editing_roles]' => "teachers",
+          'wiki_page[published]' => options[:published] 
         }
       end
     end
