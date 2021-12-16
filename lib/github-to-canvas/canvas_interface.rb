@@ -82,8 +82,8 @@ class CanvasInterface
   end
 
   def self.update_existing_lesson(options, name, html)
-    if options[:type] == "discussion"
-      url = "#{ENV['CANVAS_API_PATH']}/courses/#{options[:course_id]}/#{options[:type]}_topics/#{options[:id]}"
+    if options[:type] == "discussion" || options[:submission_types] == "discussion_topic"
+      url = "#{ENV['CANVAS_API_PATH']}/courses/#{options[:course_id]}/discussion_topics/#{options[:id]}"
     else
       url = "#{ENV['CANVAS_API_PATH']}/courses/#{options[:course_id]}/#{options[:type]}s/#{options[:id]}"
     end

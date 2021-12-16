@@ -193,6 +193,7 @@ class GithubToCanvas
           options[:filepath] = File.dirname(lesson["repository"])
           options[:file_to_convert] = File.basename(lesson["repository"])
           options[:branch] = 'master'
+          options[:submission_types] = lesson["submission_types"] || nil # don't populate if not provided
           html = RepositoryConverter.local_file_conversion(options)
           
           html = RepositoryConverter.adjust_converted_html(options, html)
